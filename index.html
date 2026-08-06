@@ -7,8 +7,8 @@
 <meta name="description" content="Juventudes ativistas em territórios digitais na pandemia (2020–2022). Pesquisa etnográfica do GEDES / Instituto NUTES / UFRJ.">
 <meta name="theme-color" content="#0d0b0a">
 <link rel="canonical" href="https://sdeiros.github.io/territorios/">
-<link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="assets/favicon-aprender-cuidar-mobilizar.png">
+<link rel="apple-touch-icon" href="assets/favicon-aprender-cuidar-mobilizar.png">
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
@@ -2043,7 +2043,7 @@ footer{background:#090807;padding-top:76px}
   <p class="reveal">Uma devolutiva só cumpre seu papel se circular. Compartilhe com quem também luta — e com quem educa.</p>
   <div class="esp-botoes reveal">
     <button class="btn-espalhe" id="btnEspalhe" type="button">Copiar link</button>
-    <a class="btn-zap" href="https://wa.me/?text=Aprender%2C%20Cuidar%20e%20Mobilizar%20%E2%80%94%20o%20que%20jovens%20ensinaram%20sobre%20redes%2C%20fome%20e%20direitos%20na%20pandemia" target="_blank" rel="noopener">Enviar no WhatsApp</a>
+    <a class="btn-zap" id="lnkZap" href="#" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp">Enviar no WhatsApp</a>
   </div>
 </section>
 
@@ -2285,15 +2285,26 @@ lbFechar.addEventListener('click', fecharLb);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') fecharLb(); });
 
 
-// espalhe: copiar link
-const btnEsp = document.getElementById('btnEspalhe');
-if(btnEsp){
-  btnEsp.addEventListener('click', async ()=>{
-    try{ await navigator.clipboard.writeText(window.location.href); btnEsp.textContent = 'Link copiado ✓'; }
-    catch(e){ btnEsp.textContent = 'Copie da barra de endereço'; }
-    setTimeout(()=> btnEsp.textContent = 'Copiar link', 2400);
-  });
-}
+// espalhe: copiar link + WhatsApp (URL embutida para gerar o preview)
+(function(){
+  const canonical = document.querySelector('link[rel="canonical"]');
+  const shareUrl = (canonical && canonical.href) || window.location.href;
+  const shareText = 'Aprender, Cuidar e Mobilizar — o que jovens ensinaram sobre redes, fome e direitos na pandemia';
+
+  const lnkZap = document.getElementById('lnkZap');
+  if(lnkZap){
+    lnkZap.setAttribute('href', 'https://wa.me/?text=' + encodeURIComponent(shareText + ' ' + shareUrl));
+  }
+
+  const btnEsp = document.getElementById('btnEspalhe');
+  if(btnEsp){
+    btnEsp.addEventListener('click', async function(){
+      try{ await navigator.clipboard.writeText(shareUrl); btnEsp.textContent = 'Link copiado ✓'; }
+      catch(e){ btnEsp.textContent = 'Copie da barra de endereço'; }
+      setTimeout(function(){ btnEsp.textContent = 'Copiar link'; }, 2400);
+    });
+  }
+})();
 
 // cards de territórios e pautas no mapa
 const participantes = [
